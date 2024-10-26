@@ -3,3 +3,5 @@ share
 Lib
 Scripts
 include
+pyvenv.cfg
+
