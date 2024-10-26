@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class=" mx-auto p-6 bg-white rounded-lg shadow-lg mt-8">
+        <!-- User Info -->
+        <h1 class="text-4xl font-bold text-blue-800 mb-4">User Information</h1>
+        <p><strong>ID:</strong> {{ user.id }}</p>
+        <p><strong>Telegram ID:</strong> {{ user.telegram_id }}</p>
+        <p><strong>Phone Number:</strong> {{ user.phone_number }}</p>
+        <p><strong>Balance:</strong> {{ user.balance }}</p>
+        <div class="mt-4">
+            <strong>QR Code:</strong><br>
+<img src="/{{ user.qr_code_path }}" alt="QR Code" class="h-16 w-16">
+        </div>
+    </div>
+</body>
+</html>

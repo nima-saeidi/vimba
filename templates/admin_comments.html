@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Comments</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 ">
+ <nav class="bg-blue-600 p-4 shadow-lg">
+        {% include 'navbar.html' %}
+    </nav>
+    <div class=" mx-auto">
+        <h1 class="text-3xl font-bold text-center mb-8 text-gray-700">Manage Comments</h1>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow-lg">
+                <thead class="bg-gray-800 text-white">
+                    <tr>
+                        <th class="py-3 px-4">Comment ID</th>
+                        <th class="py-3 px-4">Product</th> <!-- Updated column for product -->
+                        <th class="py-3 px-4">User</th>
+                        <th class="py-3 px-4">Comment</th>
+                        <th class="py-3 px-4">Rating</th>
+                        <th class="py-3 px-4">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="text-gray-700">
+                    {% for entry in comments_with_products %} <!-- Use the updated variable -->
+                    <tr class="border-b hover:bg-gray-100">
+                        <td class="py-3 px-4">{{ entry.comment.id }}</td>
+                        <td class="py-3 px-4">{{ entry.product.name if entry.product else 'N/A' }}</td> <!-- Product name -->
+                        <td class="py-3 px-4">{{ entry.comment.user_name }}</td>
+                        <td class="py-3 px-4">{{ entry.comment.content }}</td>
+                        <td class="py-3 px-4">{{ entry.comment.rating or 'No rating' }}</td>
+                        <td class="py-3 px-4">
+                            <form method="POST" action="/admin/comments/{{ entry.comment.id }}/rate" class="inline-flex space-x-2">
+                                <input
+                                    type="number"
+                                    name="rating"
+                                    min="1"
+                                    max="5"
+                                    value="{{ entry.comment.rating }}"
+                                    class="w-16 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                                <button
+                                    type="submit"
+                                    class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                                    Update Rating
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

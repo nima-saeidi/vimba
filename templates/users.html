@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <nav class="bg-blue-600 p-4 shadow-lg">
+        {% include 'navbar.html' %}
+    </nav>
+
+    <!-- Main Content Container -->
+        <!-- Page Heading -->
+        <h1 class="text-4xl font-bold text-blue-800 mb-8 text-center">User List</h1>
+
+        <!-- User Table -->
+       <!-- User Table -->
+<div class="overflow-x-auto">
+    <table class="min-w-full table-auto bg-white border border-gray-200 rounded-lg shadow-md">
+        <thead class="bg-blue-800 text-white uppercase text-sm leading-normal">
+            <tr>
+                <th class="px-6 py-3 text-left">ID</th>
+                <th class="px-6 py-3 text-left">Telegram ID</th>
+                <th class="px-6 py-3 text-left">Phone Number</th>
+                <th class="px-6 py-3 text-left">Balance</th>
+                <th class="px-6 py-3 text-left">QR Code</th>
+            </tr>
+        </thead>
+        <tbody class="text-gray-700 text-sm font-light">
+            {% for user in users %}
+            <tr class="border-b border-gray-200 hover:bg-gray-100 transition duration-200 ease-in-out cursor-pointer"
+                onclick="window.location.href='{{ url_for('user_details', user_id=user.id) }}'">
+                <td class="px-6 py-4 font-medium text-gray-900">{{ user.id }}</td>
+                <td class="px-6 py-4">{{ user.telegram_id }}</td>
+                <td class="px-6 py-4">{{ user.phone_number }}</td>
+                <td class="px-6 py-4">{{ user.balance }}</td>
+                <td class="px-6 py-4">
+                    <div class="flex items-center mt-2">
+                        {% if user.qr_code_path %}
+                        <img src="/{{ user.qr_code_path }}" alt="QR Code" class="h-16 w-16">
+                        {% else %}
+                        <p>No QR code available</p>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination Controls -->
+<div class="mt-6 flex justify-center">
+    <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+        <!-- Previous Page Link -->
+        {% if pagination.has_prev %}
+        <a href="{{ url_for('view_users', page=pagination.prev_num) }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            Previous
+        </a>
+        {% else %}
+        <span class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-500 cursor-not-allowed">
+            Previous
+        </span>
+        {% endif %}
+
+        <!-- Page Numbers -->
+        {% for page_num in range(1, pagination.pages + 1) %}
+            {% if page_num == pagination.page %}
+            <span class="z-10 bg-blue-100 border-blue-300 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                {{ page_num }}
+            </span>
+            {% else %}
+            <a href="{{ url_for('view_users', page=page_num) }}" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                {{ page_num }}
+            </a>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Next Page Link -->
+        {% if pagination.has_next %}
+        <a href="{{ url_for('view_users', page=pagination.next_num) }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+            Next
+        </a>
+        {% else %}
+        <span class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-gray-100 text-sm font-medium text-gray-500 cursor-not-allowed">
+            Next
+        </span>
+        {% endif %}
+    </nav>
+</div>
+
+
+    <!-- Footer (Optional) -->
+    <footer class="bg-blue-600 text-white text-center p-4 mt-8">
+        <p>&copy; 2024 Your Company</p>
+    </footer>
+</body>
+</html>

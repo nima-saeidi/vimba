@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Orders</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <nav class="bg-blue-600 p-4 shadow-lg">
+        {% include 'navbar.html' %}
+    </nav>
+
+    <div class=" mx-auto p-6 bg-white rounded-lg shadow-md mt-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">User Orders</h1>
+        <table class="w-full bg-white border border-gray-200 rounded-lg shadow-md">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-4 py-2 text-left">Order ID</th>
+                    <th class="px-4 py-2 text-left">Order Date</th>
+                    <th class="px-4 py-2 text-left">Status</th>
+                    <th class="px-4 py-2 text-left">Product Name</th>
+                    <th class="px-4 py-2 text-left">Change Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr class="border-b">
+                    <td class="px-4 py-2">{{ order[0] }}</td>
+                    <td class="px-4 py-2">{{ order[1] }}</td>
+                    <td class="px-4 py-2">{{ order[2] }}</td>
+                    <td class="px-4 py-2">{{ order[3] }}</td>
+                    <td class="px-4 py-2">
+                        <form action="{{ url_for('change_order_status', order_id=order[0]) }}" method="post" class="flex items-center space-x-2">
+                            <select name="status" class="p-2 border border-gray-300 rounded">
+                                <option value="Accepted">Accepted</option>
+                                <option value="Rejected">Rejected</option>
+                            </select>
+                            <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Update Status</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

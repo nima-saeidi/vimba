@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .tab-content {
+            display: none; /* Hide all tab content by default */
+        }
+        .tab-content.active {
+            display: block; /* Show the active tab content */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <nav class="bg-blue-600 p-4 shadow-lg">
+        {% include 'navbar.html' %}
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="mb-4">
+                {% for category, message in messages %}
+                    <div class="p-2 mb-2 rounded-lg
+                        {% if category == 'success' %}bg-green-100 text-green-800{% endif %}
+                        {% if category == 'error' %}bg-red-100 text-red-800{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="mb-6">
+        <p class="text-lg font-semibold mb-4"><strong>Balance:</strong> ${{ user.balance }}</p>
+        <p class="text-lg font-semibold mb-4"><strong>Referral Count:</strong> {{ referral_count }}</p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="flex border-b">
+        <button class="tab-button px-4 py-2 font-semibold text-blue-600 border-b-2 border-blue-600" data-target="orders">Orders</button>
+        <button class="tab-button px-4 py-2 font-semibold text-gray-600 hover:text-blue-600" data-target="charges">Charges</button>
+        <button class="tab-button px-4 py-2 font-semibold text-gray-600 hover:text-blue-600" data-target="manage-orders">Manage Orders</button>
+    </div>
+
+    <!-- Tab Contents -->
+    <div id="orders" class="tab-content active">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Orders</h2>
+        <table class="w-full bg-white border border-gray-200 rounded-lg shadow-md mb-6">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-4 py-2 text-left">Order ID</th>
+                    <th class="px-4 py-2 text-left">Status</th>
+                    <th class="px-4 py-2 text-left">Status Date</th>
+                    <th class="px-4 py-2 text-left">Order URL</th>
+                    <th class="px-4 py-2 text-left">Update Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr class="border-b">
+                    <td class="px-4 py-2">{{ order.id }}</td>
+                    <td class="px-4 py-2">{{ order.status }}</td>
+                    <td class="px-4 py-2">{{ order.status_date }}</td>
+                    <td class="px-4 py-2">
+                        <a href="{{ order.url }}" class="text-blue-500 hover:text-blue-700" target="_blank">{{ order.url }}</a>
+                    </td>
+                    <td class="px-4 py-2">
+                        <form method="POST" action="{{ url_for('update_status') }}" class="flex flex-col space-y-2">
+                            <input type="hidden" name="user_id" value="{{ user.id }}">
+                            <input type="hidden" name="order_id" value="{{ order.id }}">
+                            <select name="new_status" required class="p-2 border border-gray-300 rounded">
+                                <option value="" disabled selected>Select Status</option>
+                                <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                                <option value="Processing" {% if order.status == 'Processing' %}selected{% endif %}>Processing</option>
+                                <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                                <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                                <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                            </select>
+                            <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Update Status</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination controls for Orders -->
+        <div class="flex justify-between mb-6">
+            <a href="?page_orders={{ current_page_orders - 1 }}" class="text-blue-500 hover:text-blue-700 {% if current_page_orders <= 1 %}pointer-events-none opacity-50{% endif %}">Previous</a>
+            <span>Page {{ current_page_orders }} of {{ total_pages_orders }}</span>
+            <a href="?page_orders={{ current_page_orders + 1 }}" class="text-blue-500 hover:text-blue-700 {% if current_page_orders >= total_pages_orders %}pointer-events-none opacity-50{% endif %}">Next</a>
+        </div>
+    </div>
+
+    <div id="charges" class="tab-content">
+        <h2 class="text-2xl font-bold text-gray-800 mt-6 mb-4">Charges</h2>
+        <table class="w-full bg-white border border-gray-200 rounded-lg shadow-md mb-6">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-4 py-2 text-left">Charge ID</th>
+                    <th class="px-4 py-2 text-left">Amount</th>
+                    <th class="px-4 py-2 text-left">Date</th>
+                    <th class="px-4 py-2 text-left">Photo</th>
+                    <th class="px-4 py-2 text-left">Record Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for charge in charges %}
+                <tr class="border-b">
+                    <td class="px-4 py-2">{{ charge.id }}</td>
+                    <td class="px-4 py-2">${{ charge.amount }}</td>
+                    <td class="px-4 py-2">{{ charge.charge_date }}</td>
+                    <td class="px-4 py-2">
+                        {% if charge.photo_path and charge.photo_path.strip() != "" %}
+                            <img src="{{ url_for('uploaded_file', filename=charge.photo_path.replace('\\', '/')) }}" alt="Charge Photo" class="w-24 h-auto rounded-lg">
+                        {% else %}
+                            No Image
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-2">
+                        <form action="{{ url_for('update_balance', user_id=user.id) }}" method="post">
+                            <input type="text" name="charge_amount" class="p-2 border border-gray-300 rounded" placeholder="Enter amount (+/-)">
+                            <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Update Balance</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination controls for Charges -->
+        <div class="flex justify-between mb-6">
+            <a href="?page_charges={{ current_page_charges - 1 }}" class="text-blue-500 hover:text-blue-700 {% if current_page_charges <= 1 %}pointer-events-none opacity-50{% endif %}">Previous</a>
+            <span>Page {{ current_page_charges }} of {{ total_pages_charges }}</span>
+            <a href="?page_charges={{ current_page_charges + 1 }}" class="text-blue-500 hover:text-blue-700 {% if current_page_charges >= total_pages_charges %}pointer-events-none opacity-50{% endif %}">Next</a>
+        </div>
+    </div>
+
+    <div id="manage-orders" class="tab-content">
+
+
+
+<h2 class="text-2xl font-bold text-gray-800 mt-6 mb-4">Manage Orders</h2>
+        <table class="w-full bg-white border border-gray-200 rounded-lg shadow-md">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-4 py-2 text-left">Order ID</th>
+                    <th class="px-4 py-2 text-left">Order url</th>
+                    <th class="px-4 py-2 text-left">Price</th>
+                    <th class="px-4 py-2 text-left">Description</th>
+                    <th class="px-4 py-2 text-left">Status</th>
+                    <th class="px-4 py-2 text-left">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr class="border-b">
+                    <td class="px-4 py-2">{{ order.order_id }}</td>
+                    <td class="px-4 py-2">{{ order.url }}</td>
+                    <td class="px-4 py-2">
+                        <form action="{{ url_for('update_order', order_id=order.id) }}" method="post">
+                            <input type="text" name="new_price" value="{{ order.price }}" class="p-2 border border-gray-300 rounded">
+                    </td>
+                    <td class="px-4 py-2">
+                            <input type="text" name="new_description" value="{{ order.description }}" class="p-2 border border-gray-300 rounded">
+                    </td>
+                    <td class="px-4 py-2">
+                        <select name="status" class="p-2 border border-gray-300 rounded">
+                            <option value="Accepted" {% if order.status == 'Accepted' %}selected{% endif %}>Accepted</option>
+                            <option value="Rejected" {% if order.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                        </select>
+                    </td>
+                    <td class="px-4 py-2">
+                        <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Update</button>
+                    </td>
+                    </form>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        // Tab functionality
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and contents
+                tabButtons.forEach(btn => btn.classList.remove('text-blue-600', 'border-blue-600'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                // Add active class to the clicked button and corresponding content
+                button.classList.add('text-blue-600', 'border-blue-600');
+                document.getElementById(button.dataset.target).classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

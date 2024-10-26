@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-500 p-4 rounded-lg shadow-md">
+        <ul class="flex space-x-4">
+            <li>
+                <a href="{{ url_for('view_users') }}" class="text-white text-lg hover:text-gray-200">View Users</a>
+            </li>
+            <li>
+                <a href="{{ url_for('view_orders') }}" class="text-white text-lg hover:text-gray-200">View Orders</a>
+            </li>
+            <li>
+                <a href="{{ url_for('view_charges') }}" class="text-white text-lg hover:text-gray-200">View Charges</a>
+            </li>
+            <li>
+                <a href="{{ url_for('view_product_statuses') }}" class="text-white text-lg hover:text-gray-200">View Product Statuses</a>
+            </li>
+            <li>
+                <a href="{{ url_for('add_product') }}" class="text-white text-lg hover:text-gray-200">add product</a>
+            </li>
+            <li>
+                <a href="{{ url_for('view_products') }}" class="text-white text-lg hover:text-gray-200">view products</a>
+            </li>
+            <li>
+            <a href="/admin/comments" class="text-white text-lg hover:text-gray-200">View Comments</a> <!-- New Link for Comments -->
+            </li>
+            <li>
+                <a href="{{ url_for('logout') }}" class="text-red-400 text-lg hover:text-red-300">Logout</a>
+            </li>
+
+        </ul>
+    </nav>
+</body>
+</html>

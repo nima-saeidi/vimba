@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Statuses</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <nav class="bg-blue-600 p-4 shadow-lg">
+        {% include 'navbar.html' %}
+    </nav>
+
+    <div class=" mx-auto p-6 bg-white rounded-lg shadow-md mt-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Product Statuses</h1>
+
+        <table class="w-full bg-white border border-gray-200 rounded-lg shadow-md mt-4">
+            <thead class="bg-green-500 text-white">
+                <tr>
+                    <th class="px-4 py-2 text-left">Order ID</th>
+                    <th class="px-4 py-2 text-left">Status</th>
+                    <th class="px-4 py-2 text-left">Status Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for status in statuses %}
+                <tr class="border-b">
+                    <td class="px-4 py-2">{{ status.order_id }}</td>
+                    <td class="px-4 py-2">{{ status.status }}</td>
+                    <td class="px-4 py-2">{{ status.status_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

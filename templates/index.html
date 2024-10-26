@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 p-4 shadow-lg">
+        {% include 'navbar.html' %}
+    </nav>
+    <div class=" mx-auto p-6 bg-white rounded-lg shadow-md mt-6 max-w-3xl">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Admin Dashboard</h1>
+        <ul class="space-y-4">
+            <li>
+                <a href="{{ url_for('view_users') }}" class="text-blue-500 hover:text-blue-700 text-lg">View Users</a>
+            </li>
+            <li>
+                <a href="{{ url_for('view_orders') }}" class="text-blue-500 hover:text-blue-700 text-lg">View Orders</a>
+            </li>
+            <li>
+                <a href="{{ url_for('view_charges') }}" class="text-blue-500 hover:text-blue-700 text-lg">View Charges</a>
+            </li>
+            <li>
+                <a href="{{ url_for('view_product_statuses') }}" class="text-blue-500 hover:text-blue-700 text-lg">View Product Statuses</a>
+            </li>
+            <li>
+                <a href="{{ url_for('add_product') }}" class="text-blue-500 hover:text-blue-700 text-lg">Add Product</a>
+            </li>
+            <li>
+                <a href="{{ url_for('view_products') }}" class="text-blue-500 hover:text-blue-700 text-lg">View Products</a>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
