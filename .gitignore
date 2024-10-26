@@ -1,22 +1,49 @@
-# created by virtualenv automatically
-share
-Lib
-Scripts
-include
-pyvenv.cfg
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
 venv/
 env/
 .venv/
+teleBotAdmin/Lib/
+teleBotAdmin/Scripts/
+
+# Distribution / packaging
+*.egg-info/
+*.egg
+dist/
+build/
+
+# Django specific
+*.log
+db.sqlite3
+media/
+
+# Flask specific
+instance/
+*.db
+
+# Environments
+.env
+.env.*
+
+# Pytest / testing
+.pytest_cache/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# VS Code and IDE specific
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Temporary files
 *.tmp
 *.temp
 *.bak
 *.swp
 *.swo
-.pytest_cache/
-*.egg-info/
-*.egg
-dist/
-build/
-__pycache__/
-*.py[cod]
-*$py.class
