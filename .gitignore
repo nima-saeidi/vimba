@@ -4,4 +4,6 @@ Lib
 Scripts
 include
 pyvenv.cfg
-
+venv/
+env/
+.venv/
