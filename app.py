@@ -26,7 +26,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 app.secret_key = 'nima123'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://vimba:password@localhost:5432/vimba'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://vimba_user:vimba@localhost:5432/vimbauser'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
