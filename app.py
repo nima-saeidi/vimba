@@ -26,7 +26,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 app.secret_key = 'nima123'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://vimba_user:vimba@localhost:5432/vimbauser'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://vimba_user:vimba@localhost:5432/vimba'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -263,8 +263,8 @@ def create_connection():
     try:
         connection = psycopg2.connect(
             dbname='vimba',
-            user='vimba',
-            password='password',
+            user='vimba_user',
+            password='vimba',
             host='localhost',
             port='5432'
         )
