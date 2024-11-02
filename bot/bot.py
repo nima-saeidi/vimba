@@ -28,7 +28,7 @@ app = Flask(__name__)
 
 
 DB_HOST = "localhost"
-DB_NAME = "vimba"
+DB_NAME = "vimbauser"
 DB_USER = "vimba_user"
 DB_PASS = "vimba"
 DB_PORT = "5432"
