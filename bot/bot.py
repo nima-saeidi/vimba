@@ -30,8 +30,8 @@ app = Flask(__name__)
 
 DB_HOST = "localhost"
 DB_NAME = "vimba"
-DB_USER = "postgres"
-DB_PASS = "n1m010"
+DB_USER = "vimba"
+DB_PASS = "password"
 DB_PORT = "5432"
 
 
