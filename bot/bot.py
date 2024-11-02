@@ -42,10 +42,8 @@ def create_connection():
             password=DB_PASS,
             port=DB_PORT
         )
-        print("connec")
         return conn
     except Exception as e:
-        print(f"Database connection failed: {e}")
         return None
 
 
@@ -178,15 +176,12 @@ def register_user(telegram_id, phone_number):
 
     conn = create_connection()
     if conn is None:
-        print("Failed to connect to the database.")
         return None
 
     try:
         with conn.cursor() as cur:
             unique_code = generate_unique_code()
             qr_code_path = generate_qr_code(unique_code)
-            print(
-                f"Inserting user with: {telegram_id_str}, {phone_number}, {unique_code}, {qr_code_path}, {0}, {referrer_id}")
 
             cur.execute(""" 
                 INSERT INTO users (telegram_id, phone_number, unique_code, qr_code_path, balance, referrer_id) 
@@ -198,7 +193,6 @@ def register_user(telegram_id, phone_number):
             conn.commit()
             return user_id
     except Exception as e:
-        print(f"Error occurred: {e}")
         return None
     finally:
         conn.close()
