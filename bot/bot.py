@@ -42,6 +42,7 @@ def create_connection():
             password=DB_PASS,
             port=DB_PORT
         )
+        print("connec")
         return conn
     except Exception as e:
         print(f"Database connection failed: {e}")
