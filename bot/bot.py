@@ -13,7 +13,6 @@ import qrcode
 import os
 import random
 import string
-from PIL import Image
 import psycopg2
 TOKEN = '7420485098:AAEcDlLy6JKTjL44F3Vin0fOo0HUFwMCup8'
 import qrcode
