@@ -33,10 +33,8 @@ DB_USER = "vimba_user"
 DB_PASS = "vimba"
 DB_PORT = "5432"
 
-
 def create_connection():
     try:
-
         conn = psycopg2.connect(
             host=DB_HOST,
             database=DB_NAME,
@@ -46,6 +44,7 @@ def create_connection():
         )
         return conn
     except Exception as e:
+        print(f"Database connection failed: {e}")
         return None
 
 
