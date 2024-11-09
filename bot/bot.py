@@ -540,29 +540,33 @@ import psycopg2  # Assuming you're using psycopg2 for PostgreSQL
 
 
 def save_charge(user_id, amount, photo_path, description=None):
-    # Set charge_date to the current datetime if it's not provided
-    charge_date = datetime.now()
+    try:
+        # Debug: Check if the function is being called
+        print(f"Called save_charge with user_id={user_id}, amount={amount}, photo_path={photo_path}")
 
-    # Debug print to verify that charge_date is not None
-    print(
-        f"Saving charge: user_id={user_id}, amount={amount}, charge_date={charge_date}, photo_path={photo_path}, description={description}")
+        # Set charge_date to the current datetime if it's not provided
+        charge_date = datetime.now()
 
-    # Create database connection
-    conn = create_connection()
-    cursor = conn.cursor()
+        # Debug print to verify charge_date value
+        print(f"charge_date={charge_date}")
 
-    # Insert the data into the database, making sure charge_date is passed
-    cursor.execute("""
-        INSERT INTO charges (user_id, amount, charge_date, photo_path, description)
-        VALUES (%s, %s, %s, %s, %s)
-    """, (user_id, amount, charge_date, photo_path, description))
+        # Create database connection
+        conn = create_connection()
+        cursor = conn.cursor()
 
-    # Commit the transaction and close the connection
-    conn.commit()
-    conn.close()
+        # Insert the data into the database, making sure charge_date is passed
+        cursor.execute("""
+            INSERT INTO charges (user_id, amount, charge_date, photo_path, description)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (user_id, amount, charge_date, photo_path, description))
+
+        # Commit the transaction and close the connection
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Error in save_charge: {e}")
 
 
-# Assuming `user_charge_data` stores charge-related information during the process
 user_charge_data = {}
 
 
@@ -576,18 +580,10 @@ def handle_charge_photo(photo_id, chat_id, from_user_id):
         local_filename = os.path.join(UPLOAD_FOLDER, f"{photo_id}.jpg")
         with open(local_filename, 'wb') as new_file:
             new_file.write(downloaded_file)
-
-        # Retrieve amount from the user's charge data
         amount = user_charge_data[from_user_id]["amount"]
         user_id = get_user_id(from_user_id)
-
-        # Call save_charge with charge_date set to current timestamp (by default)
         save_charge(user_id, amount, local_filename, "Photo charge")
-
-        # Remove the user's charge data from memory after processing
         del user_charge_data[from_user_id]
-
-        # Send success message to user
         bot.send_message(
             chat_id=chat_id,
             text="Charge successful! Your balance has been updated.",
