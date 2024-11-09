@@ -162,6 +162,7 @@
                     <td class="px-4 py-2">
                         <form action="{{ url_for('update_order', order_id=order.id) }}" method="post">
                             <input type="text" name="new_price" value="{{ order.price }}" class="p-2 border border-gray-300 rounded">
+                        </form>
                     </td>
                     <td class="px-4 py-2">
                             <input type="text" name="new_description" value="{{ order.description }}" class="p-2 border border-gray-300 rounded">
