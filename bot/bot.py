@@ -585,7 +585,7 @@ def handle_charge_photo(photo_id, chat_id, from_user_id):
     except Exception as e:
         bot.send_message(
             chat_id=chat_id,
-            text=f"An error occurred while processing your photo: {str(e)}"
+            text=f"An error occurred while processing your photo1: {str(e)}"
         )
 
 
