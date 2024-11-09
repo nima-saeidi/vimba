@@ -540,14 +540,18 @@ import psycopg2  # Assuming you're using psycopg2 for PostgreSQL
 
 
 def save_charge(user_id, amount, photo_path, description=None):
-    # Ensure charge_date is set to current datetime if not explicitly provided
-    charge_date = datetime.now()  # Default charge date if not passed
+    # Set charge_date to the current datetime if it's not provided
+    charge_date = datetime.now()
+
+    # Debug print to verify that charge_date is not None
+    print(
+        f"Saving charge: user_id={user_id}, amount={amount}, charge_date={charge_date}, photo_path={photo_path}, description={description}")
 
     # Create database connection
     conn = create_connection()
     cursor = conn.cursor()
 
-    # Ensure that we are passing the correct values, including charge_date
+    # Insert the data into the database, making sure charge_date is passed
     cursor.execute("""
         INSERT INTO charges (user_id, amount, charge_date, photo_path, description)
         VALUES (%s, %s, %s, %s, %s)
