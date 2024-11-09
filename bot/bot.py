@@ -542,9 +542,9 @@ def save_charge(user_id, amount, photo_path, description=None):
     conn = create_connection()
     cursor = conn.cursor()
     cursor.execute("""
-        INSERT INTO charges (user_id, amount, charge_date, photo_path, description)
-        VALUES (%s, %s, %s, %s, %s)
-    """, (user_id, amount, datetime.now(), photo_path, description))
+        INSERT INTO charges (user_id, amount, charge_date, photo_path, description,charge_date)
+        VALUES (%s, %s, %s, %s, %s,%s)
+    """, (user_id, amount, datetime.now(), photo_path, description,charge_date))
     conn.commit()
     conn.close()
 
