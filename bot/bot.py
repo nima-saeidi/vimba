@@ -535,18 +535,25 @@ def handle_order_color(message):
 
 from datetime import datetime
 
+from datetime import datetime
+import psycopg2  # Assuming you're using psycopg2 for PostgreSQL
 
-def save_charge(user_id, amount, photo_path, description=None, charge_date=None):
-    # Use the current datetime if charge_date is not provided
-    if charge_date is None:
-        charge_date = datetime.now()
 
+def save_charge(user_id, amount, photo_path, description=None):
+    # Ensure charge_date is set to current datetime if not explicitly provided
+    charge_date = datetime.now()  # Default charge date if not passed
+
+    # Create database connection
     conn = create_connection()
     cursor = conn.cursor()
+
+    # Ensure that we are passing the correct values, including charge_date
     cursor.execute("""
         INSERT INTO charges (user_id, amount, charge_date, photo_path, description)
         VALUES (%s, %s, %s, %s, %s)
     """, (user_id, amount, charge_date, photo_path, description))
+
+    # Commit the transaction and close the connection
     conn.commit()
     conn.close()
 
