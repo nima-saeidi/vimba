@@ -536,19 +536,22 @@ def handle_order_color(message):
 from datetime import datetime
 
 
-def save_charge(user_id, amount, photo_path, description=None):
-    charge_date = datetime.now()
+def save_charge(user_id, amount, photo_path, description=None, charge_date=None):
+    # Use the current datetime if charge_date is not provided
+    if charge_date is None:
+        charge_date = datetime.now()
 
     conn = create_connection()
     cursor = conn.cursor()
     cursor.execute("""
         INSERT INTO charges (user_id, amount, charge_date, photo_path, description)
-        VALUES (%s, %s, %s, %s, %s,%s)
-    """, (user_id, amount, datetime.now(), photo_path, description))
+        VALUES (%s, %s, %s, %s, %s)
+    """, (user_id, amount, charge_date, photo_path, description))
     conn.commit()
     conn.close()
 
 
+# Assuming `user_charge_data` stores charge-related information during the process
 user_charge_data = {}
 
 
@@ -562,12 +565,18 @@ def handle_charge_photo(photo_id, chat_id, from_user_id):
         local_filename = os.path.join(UPLOAD_FOLDER, f"{photo_id}.jpg")
         with open(local_filename, 'wb') as new_file:
             new_file.write(downloaded_file)
+
+        # Retrieve amount from the user's charge data
         amount = user_charge_data[from_user_id]["amount"]
         user_id = get_user_id(from_user_id)
-        save_charge(user_id, amount, "Photo charge", local_filename)
 
+        # Call save_charge with charge_date set to current timestamp (by default)
+        save_charge(user_id, amount, local_filename, "Photo charge")
+
+        # Remove the user's charge data from memory after processing
         del user_charge_data[from_user_id]
 
+        # Send success message to user
         bot.send_message(
             chat_id=chat_id,
             text="Charge successful! Your balance has been updated.",
@@ -578,6 +587,9 @@ def handle_charge_photo(photo_id, chat_id, from_user_id):
             chat_id=chat_id,
             text=f"An error occurred while processing your photo: {str(e)}"
         )
+
+
+
 @bot.message_handler(content_types=['photo'])
 def handle_photo_message(message):
     photo_id = message.photo[-1].file_id
