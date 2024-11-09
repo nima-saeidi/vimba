@@ -541,26 +541,14 @@ import psycopg2  # Assuming you're using psycopg2 for PostgreSQL
 
 def save_charge(user_id, amount, photo_path, description=None):
     try:
-        # Debug: Check if the function is being called
-        print(f"Called save_charge with user_id={user_id}, amount={amount}, photo_path={photo_path}")
-
-        # Set charge_date to the current datetime if it's not provided
         charge_date = datetime.now()
-
-        # Debug print to verify charge_date value
         print(f"charge_date={charge_date}")
-
-        # Create database connection
         conn = create_connection()
         cursor = conn.cursor()
-
-        # Insert the data into the database, making sure charge_date is passed
         cursor.execute("""
             INSERT INTO charges (user_id, amount, charge_date, photo_path, description)
             VALUES (%s, %s, %s, %s, %s)
         """, (user_id, amount, charge_date, photo_path, description))
-
-        # Commit the transaction and close the connection
         conn.commit()
         conn.close()
     except Exception as e:
@@ -582,7 +570,6 @@ def handle_charge_photo(photo_id, chat_id, from_user_id):
             new_file.write(downloaded_file)
         amount = user_charge_data[from_user_id]["amount"]
         user_id = get_user_id(from_user_id)
-        print("asjkdh")
         save_charge(user_id, amount, local_filename, "Photo charge")
         del user_charge_data[from_user_id]
         bot.send_message(
