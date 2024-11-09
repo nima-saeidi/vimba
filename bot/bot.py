@@ -582,6 +582,7 @@ def handle_charge_photo(photo_id, chat_id, from_user_id):
             new_file.write(downloaded_file)
         amount = user_charge_data[from_user_id]["amount"]
         user_id = get_user_id(from_user_id)
+        print("asjkdh")
         save_charge(user_id, amount, local_filename, "Photo charge")
         del user_charge_data[from_user_id]
         bot.send_message(
