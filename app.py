@@ -888,5 +888,24 @@ def update_comment_rating(comment_id):
     return redirect('/admin/comments')
 
 
+@app.route('/product/<int:product_id>', methods=['GET'])
+def get_product_detail(product_id):
+    product = Product.query.get(product_id)
+
+    if not product:
+        return ("Product not found")
+
+    product_data = {
+        "id": product.id,
+        "name": product.name,
+        "description": product.description,
+        "price": float(product.price),
+        "photo_path": product.photo_path,
+        "options": product.options,
+        "comments": [{"id": comment.id, "content": comment.content} for comment in product.comments]
+    }
+
+    return jsonify(product_data), 200
+
 if __name__ == "__main__":
     app.run(debug=True,host="0.0.0.0",port="5005")
