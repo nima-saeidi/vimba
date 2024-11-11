@@ -902,7 +902,7 @@ def get_product_detail(product_id):
         "photo_path": product.photo_path,
         "options": product.options,
         # "rate": product.rate,
-        "comments": [{"id": comment.id, "content": comment.content} for comment in product.comments]
+        # "comments": [{"id": comment.id, "content": comment.content} for comment in product.comments]
     }
 
     return jsonify(product_data), 200
