@@ -890,6 +890,7 @@ def update_comment_rating(comment_id):
 @app.route('/product/<int:product_id>', methods=['GET'])
 def get_product_detail(product_id):
     product = Product.query.get(product_id)
+    print(vars(product))  # This will show all attributes of the product object
 
     if not product:
         return ("Product not found")
