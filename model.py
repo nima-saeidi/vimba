@@ -69,7 +69,6 @@ class Charge(db.Model):
     charge_date = db.Column(db.DateTime, nullable=True, default=datetime.utcnow)
 
 
-
 class Product(db.Model):
     __tablename__ = 'products'
     id = db.Column(db.Integer, primary_key=True)
@@ -77,9 +76,9 @@ class Product(db.Model):
     description = db.Column(db.Text, nullable=False)
     price = db.Column(db.Numeric, nullable=False)
     photo_path = db.Column(db.String(255), nullable=False)
-    options = db.Column(JSON)
+    options = db.Column(db.JSON)
     rate = db.Column(db.Integer, nullable=True)
-    comments = relationship('Comment', backref='product', lazy=True)
+    comments = db.relationship('Comment', backref='product', lazy=True)
 
 
 class Comment(db.Model):
