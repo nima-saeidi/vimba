@@ -901,7 +901,7 @@ def get_product_detail(product_id):
         "price": float(product.price),
         "photo_path": product.photo_path,
         "options": product.options,
-        "rate": product.rate,
+        "rate": product.rating,
         "comments": [{"id": comment.id, "content": comment.content} for comment in product.comments]
     }
 
