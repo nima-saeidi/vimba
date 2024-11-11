@@ -79,7 +79,7 @@ class Product(db.Model):
     photo_path = db.Column(db.String(255), nullable=False)
     options = db.Column(JSON)
     comments = relationship('Comment', backref='product', lazy=True)
-    rating = db.Column(db.Integer, nullable=True)
+    rate = db.Column(db.Integer, nullable=True)
 
 
 class Comment(db.Model):

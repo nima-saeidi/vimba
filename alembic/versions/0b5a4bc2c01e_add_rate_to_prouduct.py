@@ -18,9 +18,9 @@ branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
-def upgrade() -> None:
-    pass
+def upgrade():
+    op.add_column('products', sa.Column('rate', sa.Integer(), nullable=True))
 
-
-def downgrade() -> None:
-    pass
+def downgrade():
+    # Remove the 'rate' column from the 'products' table if downgrading
+    op.drop_column('products', 'rate')
