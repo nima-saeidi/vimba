@@ -572,7 +572,7 @@ def add_product():
                 name=name,
                 description=description,
                 price=price,
-                rating=rating,
+                rate=rating,
                 photo_path=filename,
                 options=options
             )
