@@ -545,6 +545,7 @@ def download_file(filename):
 
 UPLOAD_FOLDER = '/uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 @app.route('/admin/add_product', methods=['GET', 'POST'])
 def add_product():
     if 'admin_logged_in' not in session:
@@ -554,17 +555,14 @@ def add_product():
         name = request.form['name']
         description = request.form['description']
         price = request.form['price']
+        rating = request.form.get('rating', type=int)
         photo = request.files['photo']
-
         options = []
         option_names = request.form.getlist('options[]')
         option_values = request.form.getlist('values[]')
-
-
         for name, value in zip(option_names, option_values):
             if name and value:
                 options.append({'name': name, 'value': value})
-
         if photo and allowed_file(photo.filename):
             filename = secure_filename(photo.filename)
             photo_path = os.path.join("static", filename)
@@ -574,6 +572,7 @@ def add_product():
                 name=name,
                 description=description,
                 price=price,
+                rating=rating,
                 photo_path=filename,
                 options=options
             )
@@ -583,6 +582,9 @@ def add_product():
             return redirect(url_for('view_product', product_id=new_product.id))
 
     return render_template('add_product.html')
+
+
+
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -638,7 +640,7 @@ def product_detail(product_id):
     product = Product.query.get(product_id)
     if not product:
         return 'Product not found', 404
-    options = json.loads(product.options)  # Assuming options are stored as JSON
+    options = json.loads(product.options)
 
     return render_template('product_detail.html', product=product, options=options)
 @app.route('/admin/products', methods=['GET'])
@@ -674,7 +676,6 @@ def edit_product(product_id):
 
         product.options = options
 
-        # Handle photo update if a new one is provided
         if 'photo' in request.files:
             photo = request.files['photo']
             if photo and allowed_file(photo.filename):
@@ -696,7 +697,6 @@ def delete_product(product_id):
 
     product = Product.query.get_or_404(product_id)
 
-    # Delete the product from the database
     db.session.delete(product)
     db.session.commit()
 
@@ -787,7 +787,6 @@ def product_statuses(order_id):
     } for status in statuses]
     return jsonify(statuses_list), 200
 
-# Public route to fetch available products
 @app.route('/user/products', methods=['GET'])
 def api_products():
     products = Product.query.all()
@@ -902,6 +901,7 @@ def get_product_detail(product_id):
         "price": float(product.price),
         "photo_path": product.photo_path,
         "options": product.options,
+        "rate": product.rate,
         "comments": [{"id": comment.id, "content": comment.content} for comment in product.comments]
     }
 
