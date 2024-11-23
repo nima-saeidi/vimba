@@ -138,47 +138,47 @@
 
 
 <h2 class="text-2xl font-bold text-gray-800 mt-6 mb-4">Manage Orders</h2>
-        <table class="w-full bg-white border border-gray-200 rounded-lg shadow-md">
-            <thead class="bg-gray-800 text-white">
-                <tr>
-                    <th class="px-4 py-2 text-left">Order ID</th>
-                    <th class="px-4 py-2 text-left">Order url</th>
-                    <th class="px-4 py-2 text-left">Price</th>
-                    <th class="px-4 py-2 text-left">Description</th>
-                    <th class="px-4 py-2 text-left">Status</th>
-                    <th class="px-4 py-2 text-left">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for order in orders %}
-                <tr class="border-b">
-                    <td class="px-4 py-2">{{ order.order_id }}</td>
-                    <td class="px-4 py-2">{{ order.url }}</td>
-                    <td class="px-4 py-2">
-                        <form action="{{ url_for('update_order', order_id=order.id) }}" method="post">
-                            <input type="text" name="new_price" value="{{ order.price }}" class="p-2 border border-gray-300 rounded">
-                        </form>
-                    </td>
-                    <td class="px-4 py-2">
-                            <input type="text" name="new_description" value="{{ order.description }}" class="p-2 border border-gray-300 rounded">
-                    </td>
-                    <td class="px-4 py-2">
-                        <select name="status" class="p-2 border border-gray-300 rounded">
-                            <option value="Accepted" {% if order.status == 'Accepted' %}selected{% endif %}>Accepted</option>
-                            <option value="Rejected" {% if order.status == 'Rejected' %}selected{% endif %}>Rejected</option>
-                        </select>
-                    </td>
-                    <td class="px-4 py-2">
-                        <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Update</button>
-                    </td>
-                    </form>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<table class="w-full bg-white border border-gray-200 rounded-lg shadow-md">
+    <thead class="bg-gray-800 text-white">
+        <tr>
+            <th class="px-4 py-2 text-left">Order ID</th>
+            <th class="px-4 py-2 text-left">Order URL</th>
+            <th class="px-4 py-2 text-left">Price</th>
+            <th class="px-4 py-2 text-left">Description</th>
+            <th class="px-4 py-2 text-left">Status</th>
+            <th class="px-4 py-2 text-left">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr class="border-b">
+            <td class="px-4 py-2">{{ order.order_id }}</td>
+            <td class="px-4 py-2">{{ order.url }}</td>
+            <td class="px-4 py-2">
+                <!-- Wrap all form elements properly inside one form -->
+                <form action="{{ url_for('update_order', order_id=order.id) }}" method="post">
+                    <input type="text" name="new_price" value="{{ order.price }}" class="p-2 border border-gray-300 rounded">
+            </td>
+            <td class="px-4 py-2">
+                <input type="text" name="new_description" value="{{ order.description }}" class="p-2 border border-gray-300 rounded">
+            </td>
+            <td class="px-4 py-2">
+                <select name="status" class="p-2 border border-gray-300 rounded">
+                    <option value="Accepted" {% if order.status == 'Accepted' %}selected{% endif %}>Accepted</option>
+                    <option value="Rejected" {% if order.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                </select>
+            </td>
+            <td class="px-4 py-2">
+                <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Update</button>
+                </form> <!-- Closing the form here -->
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
     </div>
     <script>
-        // Tab functionality
         const tabButtons = document.querySelectorAll('.tab-button');
         const tabContents = document.querySelectorAll('.tab-content');
 
