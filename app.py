@@ -544,33 +544,53 @@ def download_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
-
-
 UPLOAD_FOLDER = '/uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+
 @app.route('/admin/add_product', methods=['GET', 'POST'])
 def add_product():
+    # Debug: Log session status
+    print("Checking admin login status...")
     if 'admin_logged_in' not in session:
+        print("Admin not logged in, redirecting to login.")
         return redirect(url_for('login'))
 
     if request.method == 'POST':
+        # Debug: Log POST data and files
+        print("Received POST request.")
+        print("Form data:", request.form)
+        print("Files:", request.files)
+
         name = request.form['name']
         description = request.form['description']
         price = request.form['price']
         rating = request.form.get('rating', type=int)
         photo = request.files['photo']
+
+        print("Parsed form data - Name:", name, "Description:", description, "Price:", price, "Rating:", rating)
+
+        # Debug: Log options before processing
         options = []
         option_names = request.form.getlist('options[]')
         option_values = request.form.getlist('values[]')
+        print("Options received - Names:", option_names, "Values:", option_values)
+
         for name, value in zip(option_names, option_values):
             if name and value:
                 options.append({'name': name, 'value': value})
+        print("Processed options:", options)
+
         if photo and allowed_file(photo.filename):
+            # Debug: Log photo details
+            print("Photo uploaded:", photo.filename)
+
             filename = secure_filename(photo.filename)
             photo_path = os.path.join("static", filename)
+            print("Saving photo to path:", photo_path)
             photo.save(photo_path)
 
+            # Debug: Log product details before saving
             new_product = Product(
                 name=name,
                 description=description,
@@ -579,13 +599,19 @@ def add_product():
                 photo_path=filename,
                 options=options
             )
+            print("New product to be added:", new_product)
+
             db.session.add(new_product)
             db.session.commit()
 
+            print("Product added with ID:", new_product.id)
             return redirect(url_for('view_product', product_id=new_product.id))
 
-    return render_template('add_product.html')
+        else:
+            print("Invalid photo or no photo uploaded.")
 
+    print("Rendering add_product template.")
+    return render_template('add_product.html')
 
 
 def allowed_file(filename):
@@ -842,10 +868,6 @@ def handle_comments(product_id):
         ]
 
         return jsonify(comments_list), 200
-
-
-
-
 
 
 @app.route('/comments/<int:comment_id>/rate', methods=['PUT'])

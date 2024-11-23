@@ -7,10 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .tab-content {
-            display: none; /* Hide all tab content by default */
+            display: none;
         }
         .tab-content.active {
-            display: block; /* Show the active tab content */
+            display: block;
         }
     </style>
 </head>
@@ -38,14 +38,12 @@
         <p class="text-lg font-semibold mb-4"><strong>Referral Count:</strong> {{ referral_count }}</p>
     </div>
 
-    <!-- Tab Navigation -->
     <div class="flex border-b">
         <button class="tab-button px-4 py-2 font-semibold text-blue-600 border-b-2 border-blue-600" data-target="orders">Orders</button>
         <button class="tab-button px-4 py-2 font-semibold text-gray-600 hover:text-blue-600" data-target="charges">Charges</button>
         <button class="tab-button px-4 py-2 font-semibold text-gray-600 hover:text-blue-600" data-target="manage-orders">Manage Orders</button>
     </div>
 
-    <!-- Tab Contents -->
     <div id="orders" class="tab-content active">
         <h2 class="text-2xl font-bold text-gray-800 mb-4">Orders</h2>
         <table class="w-full bg-white border border-gray-200 rounded-lg shadow-md mb-6">
@@ -87,7 +85,6 @@
             </tbody>
         </table>
 
-        <!-- Pagination controls for Orders -->
         <div class="flex justify-between mb-6">
             <a href="?page_orders={{ current_page_orders - 1 }}" class="text-blue-500 hover:text-blue-700 {% if current_page_orders <= 1 %}pointer-events-none opacity-50{% endif %}">Previous</a>
             <span>Page {{ current_page_orders }} of {{ total_pages_orders }}</span>
@@ -102,7 +99,6 @@
                 <tr>
                     <th class="px-4 py-2 text-left">Charge ID</th>
                     <th class="px-4 py-2 text-left">Amount</th>
-                    <th class="px-4 py-2 text-left">Date</th>
                     <th class="px-4 py-2 text-left">Photo</th>
                     <th class="px-4 py-2 text-left">Record Note</th>
                 </tr>
@@ -112,7 +108,6 @@
                 <tr class="border-b">
                     <td class="px-4 py-2">{{ charge.id }}</td>
                     <td class="px-4 py-2">${{ charge.amount }}</td>
-                    <td class="px-4 py-2">{{ charge.charge_date }}</td>
                     <td class="px-4 py-2">
                         {% if charge.photo_path and charge.photo_path.strip() != "" %}
                             <img src="{{ url_for('uploaded_file', filename=charge.photo_path.replace('\\', '/')) }}" alt="Charge Photo" class="w-24 h-auto rounded-lg">
