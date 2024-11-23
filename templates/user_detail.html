@@ -110,6 +110,7 @@
                     <td class="px-4 py-2">${{ charge.amount }}</td>
                     <td class="px-4 py-2">
                         {% if charge.photo_path and charge.photo_path.strip() != "" %}
+                            <div>{charge.photo_path}</div>
                             <img src="{{ url_for('uploaded_file', filename=charge.photo_path.replace('\\', '/')) }}" alt="Charge Photo" class="w-24 h-auto rounded-lg">
                         {% else %}
                             No Image
