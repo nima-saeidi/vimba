@@ -109,12 +109,29 @@
                     <td class="px-4 py-2">{{ charge.id }}</td>
                     <td class="px-4 py-2">${{ charge.amount }}</td>
                     <td class="px-4 py-2">
-                        {% if charge.photo_path and charge.photo_path.strip() != "" %}
-                            <img src="{{ charge.photo_path.replace('\\', '/') }}" alt="Charge Photo" class="w-24 h-auto rounded-lg">
-
-                        {% else %}
-                            No Image
-                        {% endif %}
+                           {% for charge in charges %}
+    <tr class="border-b">
+        <td class="px-4 py-2">{{ charge.id }}</td>
+        <td class="px-4 py-2">${{ charge.amount }}</td>
+        <td class="px-4 py-2">
+            {% if charge.photo_path and charge.photo_path.strip() != "" %}
+                <!-- Adjust the photo_path to remove "../" -->
+                {% set img_url = charge.photo_path.replace("../static/", "") %}
+                <!-- Display the image -->
+                <img src="{{ url_for('static', filename=img_url) }}"
+                     alt="Charge Photo"
+                     class="w-24 h-auto rounded-lg">
+                <!-- Display the URL -->
+                <p class="mt-2 text-sm text-gray-600">
+                    <a href="{{ url_for('static', filename=img_url) }}"
+                       target="_blank"
+                       class="text-blue-500 hover:underline">
+                        {{ url_for('static', filename=img_url) }}
+                    </a>
+                </p>
+            {% else %}
+                No Image
+            {% endif %}
                     </td>
                     <td class="px-4 py-2">
                         <form action="{{ url_for('update_balance', user_id=user.id) }}" method="post">
