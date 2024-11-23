@@ -110,14 +110,8 @@
                     <td class="px-4 py-2">${{ charge.amount }}</td>
                     <td class="px-4 py-2">
                         {% if charge.photo_path and charge.photo_path.strip() != "" %}
-                            <img src="{{ url_for('uploaded_file', filename=charge.photo_path.replace('\\', '/')) }}" alt="Charge Photo" class="w-24 h-auto rounded-lg">
-                             <p class="mt-2 text-sm text-gray-600">
-                    <a href="{{ url_for('uploaded_file', filename=charge.photo_path.replace('\\', '/')) }}"
-                       target="_blank"
-                       class="text-blue-500 hover:underline">
-                        {{ url_for('uploaded_file', filename=charge.photo_path.replace('\\', '/')) }}
-                    </a>
-                </p>
+                            <img src="{{ charge.photo_path.replace('\\', '/') }}" alt="Charge Photo" class="w-24 h-auto rounded-lg">
+
                         {% else %}
                             No Image
                         {% endif %}
