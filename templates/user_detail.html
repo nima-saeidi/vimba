@@ -109,19 +109,11 @@
                     <td class="px-4 py-2">{{ charge.id }}</td>
                     <td class="px-4 py-2">${{ charge.amount }}</td>
                     <td class="px-4 py-2">
-                           {% for charge in charges %}
-    <tr class="border-b">
-        <td class="px-4 py-2">{{ charge.id }}</td>
-        <td class="px-4 py-2">${{ charge.amount }}</td>
-        <td class="px-4 py-2">
-            {% if charge.photo_path and charge.photo_path.strip() != "" %}
-                <!-- Adjust the photo_path to remove "../" -->
+                        {% if charge.photo_path and charge.photo_path.strip() != "" %}
                 {% set img_url = charge.photo_path.replace("../static/", "") %}
-                <!-- Display the image -->
                 <img src="{{ url_for('static', filename=img_url) }}"
                      alt="Charge Photo"
                      class="w-24 h-auto rounded-lg">
-                <!-- Display the URL -->
                 <p class="mt-2 text-sm text-gray-600">
                     <a href="{{ url_for('static', filename=img_url) }}"
                        target="_blank"
