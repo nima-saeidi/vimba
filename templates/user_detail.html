@@ -104,7 +104,8 @@
                 </tr>
             </thead>
             <tbody>
-                 {% if charge.photo_path and charge.photo_path.strip() != "" %}
+                  <td class="px-4 py-2">
+        {% if charge.photo_path and charge.photo_path.strip() != "" %}
             <img src="{{ url_for('static', filename='uploads/' + charge.photo_path) }}"
                  alt="Charge Photo"
                  class="w-24 h-auto rounded-lg">
@@ -118,6 +119,7 @@
         {% else %}
             No Image
         {% endif %}
+    </td>
                     </td>
                     <td class="px-4 py-2">
                         <form action="{{ url_for('update_balance', user_id=user.id) }}" method="post">
