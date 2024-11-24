@@ -539,13 +539,15 @@ def user_orders(user_id):
     return render_template('user_orders.html', orders=orders)
 
 
-@app.route('/admin/uploads/<path:filename>')
-def download_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
 
 
 UPLOAD_FOLDER = '/uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+@app.route('/admin/uploads/<path:filename>')
+def download_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 @app.route('/admin/add_product', methods=['GET', 'POST'])
