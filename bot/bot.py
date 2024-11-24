@@ -565,7 +565,7 @@ def handle_charge_photo(photo_id, chat_id, from_user_id):
         file_info = bot.get_file(photo_id)
         file_path = file_info.file_path
         downloaded_file = bot.download_file(file_path)
-        local_filename = os.path.join(UPLOAD_FOLDER, f"{photo_id}.jpg")
+        local_filename = os.path.join( f"{photo_id}.jpg")
         with open(local_filename, 'wb') as new_file:
             new_file.write(downloaded_file)
         amount = user_charge_data[from_user_id]["amount"]
